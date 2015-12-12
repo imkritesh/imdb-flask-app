@@ -74,20 +74,22 @@
                         <div class="list-group-item" >
                             <div class="row" >
                                 <div class="col-lg-2">
-                            <img src="{{actor.image_link}}" href="movies/{{actor.actor_id}}" class="img-thumbnail"
+                                <a  href="{{url_for('resultPage', actor_id = actor.actor_id)}}">
+                                <img src="{{actor.image_link}}" class="img-thumbnail"
                                 height="150px" width="100px">
+                                </a>
                                     
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-10">
                                     <p><strong>Name: </strong> 
-                                    <a href="movies/{{actor.actor_id}}">
+                                    <a href="{{url_for('resultPage', actor_id = actor.actor_id)}}">
                                     {{ actor.name }}
                                     </a>
                                     </p>
                                     <p><strong>Bio: </strong><br>
                                     {{ actor.bio }}
                                     </p>  
-                                    <a href="movies/{{actor.actor_id}}" type="submit" class="btn btn-primary col-lg-3 delete_btn">Lets Go</a>
+                                    <a href="{{url_for('resultPage', actor_id = actor.actor_id)}}" class="btn btn-primary col-lg-3 delete_btn">Lets Go</a>
                                 </div>
                             </div>
                             

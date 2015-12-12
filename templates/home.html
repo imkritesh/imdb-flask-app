@@ -1,0 +1,114 @@
+    
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="project manager">
+    <meta name="author" content="kritesh semwal">
+    <meta name="google-site-verification" content="p699sAx3RzGtl7pVDNzQQYvdE929w6ul0hTqtkh_PPI" />
+
+    <title></title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/include_files/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/static/include_files/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+     <!-- DataTables CSS -->
+    <link href="/static/include_files/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="/static/include_files/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/static/include_files/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/static/include_files/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- jQuery -->
+    <script src="/static/include_files/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Jquery UI -->
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/include_files/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+
+</head>
+
+<body>
+<div id="wrapper">
+    <div class="container-fluid">
+        <div class="row">
+        <div class="col-lg-2">
+        </div>
+            <div class="col-lg-8">
+                     
+                        
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <center><h4><i class="glyphicon glyphicon-search"></i> SEARCH ACTOR / ACTRESS</h4>
+                        </center>
+                    </div>
+                    <div class="panel-body">
+
+                    <form class="form-inline " role="form" method="GET">
+
+                     <input type="text" class="form-control" name="query" placeholder="Search By Actor/Actress Name" 
+                     {%if query%}
+                        value = {{query}}
+                     {%endif%}
+                     style="width:90%">             
+                     <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>                                 
+                    </form>
+                    <br>
+                    <div class="list-group">
+                       <!--  <div class="alert alert-danger alert-dismissable" role="alert" style="">
+                               
+
+                        </div> -->
+                       {% for actor in actors %}
+                        <div class="list-group-item" >
+                            <div class="row" >
+                                <div class="col-lg-2">
+                            <img src="{{actor.image_link}}" href="movies/{{actor.actor_id}}" class="img-thumbnail"
+                                height="150px" width="100px">
+                                    
+                                </div>
+                                <div class="col-lg-6">
+                                    <p><strong>Name: </strong> 
+                                    <a href="movies/{{actor.actor_id}}">
+                                    {{ actor.name }}
+                                    </a>
+                                    </p>
+                                    <p><strong>Bio: </strong><br>
+                                    {{ actor.bio }}
+                                    </p>  
+                                    <a href="movies/{{actor.actor_id}}" type="submit" class="btn btn-primary col-lg-3 delete_btn">Lets Go</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        {% endfor %}
+                    
+                    </div>
+
+                        
+                        </div> <!-- panel-body -->
+                    </div>
+                </div> <!-- col-lg-8 -->
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+.show
+{
+    display: inline-block;
+}
+</style>
+</body>
+</html>

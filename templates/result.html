@@ -48,17 +48,21 @@
                         
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <center><h4><i class="glyphicon glyphicon-search"></i> Movies </h4>
+                        <center><h4><i class="glyphicon glyphicon-film"></i> Top 3 Movies By: 
+                        {%if name%}
+                        {{name}}
+                        {%endif%} 
+                        </h4>
                         </center>
                     </div>
                         <div class="panel-body">
                              <table class="table table-bordered">
                                 <thead>
                                   <tr>
-                                    <th>Movie Display Pic</th>
-                                    <th>Details</th>
-                                    <th>Rating</th>
-                                    <th>Top Reviews</th>
+                                    <th><h4>Movie Display Pic</h4></th>
+                                    <th><h4>Details</h4></th>
+                                    <th><h4><h4>Rating</h4></th>
+                                    <th><h4>Top Reviews</h4></th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -68,16 +72,19 @@
                                         <img src="{{movie.display_pic}}" class="img-thumbnail"
                                         height="200px" width="200px">
                                     </td>
-                                    <td  class="col-md-2"> 
+                                    <td  class="col-md-3"> 
+                                    <strong>
                                         <a href="http://www.imdb.com/title/{{movie.movie_id}}">
                                         {{movie.title}}</a>
                                         |{{movie.length}}
                                         |{{movie.genre}}
                                         |{{movie.release_date}}
+                                    </strong>
                                     </td>
                                     <td  class="col-md-2"> 
-                                    {{movie.rating}}</td>
-                                    <td  class="col-md-6">
+                                    <strong>{{movie.rating}}</strong>
+                                    </td>
+                                    <td  class="col-md-5">
                                     {%for review in movie.reviews%}
                                         {{review.index}}.
                                         <strong>{{review.heading}}</strong>:
@@ -87,6 +94,9 @@
                                         </span>
                                         <br>
                                     {%endfor%}
+                                    {% if movie.rating == "Not Yet Released" %}
+                                      <strong>  Not Yet Released </strong>
+                                    {% endif %}
                                     </td>
                                   </tr>
                                   {%endfor%}
@@ -103,6 +113,48 @@
 </div>
 </body>
 <script type="text/javascript">
+$(document).ready(function() {
+        console.log('ready');
+        var showChar = 300;  
+        var ellipsestext = "...";
+        var moretext = "Show more";
+        var lesstext = "Show less";
+        $('.review').each(function(){
+        var content = $(this).html();
+        if(content.length > showChar) {
+            var c = content.substr(0, showChar);
+            var h = content.substr(showChar, content.length - showChar);
+         //   console.log('c123:'+c);
+          //  console.log('h456:'+h);
+            var html = c + '<span class="moreellipses">' + ellipsestext+ '</span><span class="morecontent"><span>' + h + '</span><a href="" class="morelink">' + moretext + '</a></span>';
+ 
+            $(this).html(html);
+        }
+        });
+        $(".morelink").click(function(){
+            //less class to check state
+        if($(this).hasClass("less")) {
+            console.log('if');
+            $(this).removeClass("less");
+            $(this).html(moretext);
+        } else {
+            console.log('else');
+            $(this).addClass("less");
+            $(this).html(lesstext);
+        }
+        $(this).parent().prev().toggle();
+        $(this).prev().toggle();//h
+        return false;
+    });
+});
     
 </script>
+<style type="text/css">
+.morecontent span {
+    display: none;
+}
+.morelink {
+    display: block;
+}
+</style>
 </html>

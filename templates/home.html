@@ -73,7 +73,7 @@
                         <div class="list-group-item" >
                             <div class="row" >
                                 <div class="col-lg-2">
-                                <a  href="{{url_for('resultPage', actor_id = actor.actor_id)}}">
+                                <a  href="{{url_for('resultPage', actor_id = actor.actor_id, name = actor.name )}}">
                                 <img src="{{actor.image_link}}" class="img-thumbnail"
                                 height="150px" width="100px">
                                 </a>
@@ -81,14 +81,14 @@
                                 </div>
                                 <div class="col-lg-10">
                                     <p><strong>Name: </strong> 
-                                    <a href="{{url_for('resultPage', actor_id = actor.actor_id)}}">
+                                    <a href="{{url_for('resultPage', actor_id = actor.actor_id, name = actor.name )}}">
                                     {{ actor.name }}
                                     </a>
                                     </p>
                                     <p><strong>Bio: </strong><br>
                                     {{ actor.bio }}
                                     </p>  
-                                    <a href="{{url_for('resultPage', actor_id = actor.actor_id)}}" class="btn btn-primary col-lg-3 delete_btn">Checkout Movies</a>
+                                    <a href="{{url_for('resultPage', actor_id = actor.actor_id, name = actor.name )}}" class="btn btn-primary col-lg-3 delete_btn">Checkout Movies</a>
                                 </div>
                             </div>
                             

@@ -1,0 +1,108 @@
+    
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="project manager">
+    <meta name="author" content="kritesh semwal">
+
+    <title>IMDB APP</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/include_files/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/static/include_files/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+     <!-- DataTables CSS -->
+    <link href="/static/include_files/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="/static/include_files/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/static/include_files/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/static/include_files/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- jQuery -->
+    <script src="/static/include_files/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Jquery UI -->
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/include_files/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+
+</head>
+
+<body>
+<div id="wrapper">
+    <div class="container-fluid">
+        <div class="row">
+        <!-- <div class="col-lg-1">
+        </div> -->
+            <div class="col-lg-12">
+                     
+                        
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <center><h4><i class="glyphicon glyphicon-search"></i> Movies </h4>
+                        </center>
+                    </div>
+                        <div class="panel-body">
+                             <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Movie Display Pic</th>
+                                    <th>Details</th>
+                                    <th>Rating</th>
+                                    <th>Top Reviews</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {%for movie in movies%}
+                                  <tr>
+                                    <td  class="col-md-2">
+                                        <img src="{{movie.display_pic}}" class="img-thumbnail"
+                                        height="200px" width="200px">
+                                    </td>
+                                    <td  class="col-md-2"> 
+                                        <a href="http://www.imdb.com/title/{{movie.movie_id}}">
+                                        {{movie.title}}</a>
+                                        |{{movie.length}}
+                                        |{{movie.genre}}
+                                        |{{movie.release_date}}
+                                    </td>
+                                    <td  class="col-md-2"> 
+                                    {{movie.rating}}</td>
+                                    <td  class="col-md-6">
+                                    {%for review in movie.reviews%}
+                                        {{review.index}}.
+                                        <strong>{{review.heading}}</strong>:
+                                        (by {{review.author}})
+                                        <span class="review">
+                                        {{review.text|safe}}
+                                        </span>
+                                        <br>
+                                    {%endfor%}
+                                    </td>
+                                  </tr>
+                                  {%endfor%}
+                                </tbody>
+                              </table>                   
+
+                        
+                        </div> <!-- panel-body -->
+                    </div>
+                </div> <!-- col-lg-8 -->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    
+</script>
+</html>

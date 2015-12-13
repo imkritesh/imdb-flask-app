@@ -51,21 +51,29 @@ def get_movie_detail_by_movie_id(movie_id):
 	rate = soup.find('span',itemprop='ratingValue').string
 	count = soup.find('span',itemprop='ratingCount').string
 	rating = rate + '/10 from ' + count + ' users'
-	return display_pic, title, length, genre, release_date
+	return display_pic, title, length, genre, release_date, rating
 
 def get_reviews_by_movie_id(movie_id, count=3):
 	'''
 	Returns top 3 reviews of the movie
 	'''
 	extra_string = '*** This review may contain spoilers ***'
+	extra_string2 = 'Find showtimes, watch trailers, browse photos, track your Watchlist and rate your favorite movies and TV shows on your phone or tablet!'
 	r = req.get('http://www.imdb.com/title/'+movie_id+'/reviews')
 	soup = bs(r.text)
 	text_list = soup.findAll('p',{'class':''})[5:]
 	rev = []
-	for i in range(count):
-		if text_list[i].string == extra_string:
-			i-=1
-		rev.append(text_list[i])
+	i = 0
+	for tex in text_list:
+		# if not text_list[i].text or  text_list[i].text == extra_string or  text_list[i].text == extra_string2: 
+		# 	i-= 1
+		if i == 3:
+			break
+		if not tex.text or tex.text == extra_string:
+			continue
+		#print i,tex.text
+		rev.append(tex)
+		i += 1
 	text_list = rev
 	headings =[heading.string for heading in soup.findAll('h2')[:3]]
 	authors = soup.findAll('a', {'href':re.compile('user')})[1:6:2]
@@ -73,11 +81,12 @@ def get_reviews_by_movie_id(movie_id, count=3):
 	reviews = []
 	for i in range(count):
 		review = {}
+		review['index'] = i+1
 		review['text'] = text_list[i]
 		review['heading'] = headings[i]
 		review['author'] = authors[i]
 		reviews.append(review)
-	print reviews[0]
+	#print reviews
 	return reviews
 
 def find_movies_by_actor_id(actor_id):
@@ -96,10 +105,11 @@ def find_movies_by_actor_id(actor_id):
 		url = div.find("a")["href"]
 		url = url.split('/')
 		movie["movie_id"] = url[2]
-		movie["display_pic"],movie["title"],movie["length"],movie["genre"],movie["release_date"] = get_movie_detail_by_movie_id(movie["movie_id"])
+		movie["display_pic"],movie["title"],movie["length"],movie["genre"],movie["release_date"],movie["rating"] = get_movie_detail_by_movie_id(movie["movie_id"])
+		movie["reviews"] = get_reviews_by_movie_id(movie["movie_id"])
 		movie_list.append(movie)
-	print movie_list
+	return movie_list
 		
 #find_by_name('shah')
 #find_movies_by_actor_id('nm1229940')
-get_reviews_by_movie_id('tt2224317')
+#get_reviews_by_movie_id('tt1562872')

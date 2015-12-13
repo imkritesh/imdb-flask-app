@@ -14,7 +14,7 @@ def homePage():
 @app.route('/person/<actor_id>')
 def resultPage(actor_id = None):
 	if actor_id:
-		return actor_id
+		return render_template('result.html',movies=find_movies_by_actor_id(actor_id))
 	else:
 		return redirect(url_for('homePage'))
 if __name__=='__main__':

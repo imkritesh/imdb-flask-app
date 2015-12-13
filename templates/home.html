@@ -67,7 +67,7 @@
                     <div class="list-group">
                        <!--  <div class="alert alert-danger alert-dismissable" role="alert" style="">
                                
-
+                    
                         </div> -->
                        {% for actor in actors %}
                         <div class="list-group-item" >
@@ -106,4 +106,19 @@
     </div>
 </div>
 </body>
+<style type="text/css">
+    .cen{
+        display:block;
+        top:100px;
+    }
+</style>
+<script type="text/javascript">
+    $('a').click(function(){
+        console.log('loading');
+        //$('#wrapper').addClass('cen');
+        var image = '<center><img style="padding:250px;display:block;" src="{{url_for('static',filename='loader.GIF')}}"></center>';
+        $('#wrapper').html(image);
+
+        });
+</script>
 </html>

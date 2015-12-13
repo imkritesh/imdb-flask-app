@@ -36,6 +36,11 @@
     
 
 </head>
+<script type="text/javascript">
+    $(window).load(function(){
+    console.log('loading');
+});
+</script>
 
 <body>
 <div id="wrapper">
@@ -74,7 +79,7 @@
                                     </td>
                                     <td  class="col-md-3"> 
                                     <strong>
-                                        <a href="http://www.imdb.com/title/{{movie.movie_id}}">
+                                        <a  target="_blank" href="http://www.imdb.com/title/{{movie.movie_id}}">
                                         {{movie.title}}</a>
                                         |{{movie.length}}
                                         |{{movie.genre}}
@@ -112,6 +117,7 @@
     </div>
 </div>
 </body>
+<div class="se-pre-con"></div>
 <script type="text/javascript">
 $(document).ready(function() {
         console.log('ready');
@@ -132,14 +138,12 @@ $(document).ready(function() {
         }
         });
         $(".morelink").click(function(){
-            //less class to check state
-        if($(this).hasClass("less")) {
-            console.log('if');
-            $(this).removeClass("less");
+            //yolo class to check state
+        if($(this).hasClass("yolo")) {
+            $(this).removeClass("yolo");
             $(this).html(moretext);
         } else {
-            console.log('else');
-            $(this).addClass("less");
+            $(this).addClass("yolo");
             $(this).html(lesstext);
         }
         $(this).parent().prev().toggle();
@@ -156,5 +160,6 @@ $(document).ready(function() {
 .morelink {
     display: block;
 }
+
 </style>
 </html>

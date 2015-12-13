@@ -11,6 +11,9 @@ def find_by_name(name):
 	r = req.get('http://www.imdb.com/search/name?name='+name)
 	soup = bs(r.text)
 	table = soup.find( "table", {"class":"results"})
+	#in case of no results
+	if not table:
+		return []
 	rows = table.findAll('tr')
 	rows.pop(0)
 	query_result = []

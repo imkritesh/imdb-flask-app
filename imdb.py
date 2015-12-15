@@ -9,7 +9,7 @@ def find_by_name(name):
 	Return at maximum top 50 actor/actresses for the search query.
 	'''
 	r = req.get('http://www.imdb.com/search/name?name='+name)
-	soup = bs(r.text)
+	soup = bs(r.text, 'html.parser')
 	table = soup.find( "table", {"class":"results"})
 	#in case of no results
 	if not table:
@@ -44,7 +44,7 @@ def get_movie_detail_by_movie_id(movie_id):
 	 of a particular movie. Queries IMDB by movie_id
 	'''
 	r = req.get('http://www.imdb.com/title/'+movie_id)
-	soup = bs(r.text)
+	soup = bs(r.text, 'html.parser')
 	display = soup.find('div',{'class':'poster'})
 	if display:
 		display_pic = display.find('a').find('img')['src']
@@ -83,7 +83,7 @@ def get_reviews_by_movie_id(movie_id, count=3):
 	extra_string = '*** This review may contain spoilers ***'
 	extra_string2 = 'Find showtimes, watch trailers, browse photos, track your Watchlist and rate your favorite movies and TV shows on your phone or tablet!'
 	r = req.get('http://www.imdb.com/title/'+movie_id+'/reviews')
-	soup = bs(r.text)
+	soup = bs(r.text, 'html.parser')
 	text_list = soup.findAll('p',{'class':''})[5:]
 	rev = []
 	i = 0
@@ -118,7 +118,7 @@ def find_movies_by_actor_id(actor_id):
 	using actor_id
 	'''
 	r = req.get('http://www.imdb.com/name/'+actor_id)
-	soup = bs(r.text)
+	soup = bs(r.text, 'html.parser')
 	movie_div = soup.find("div", {"id":"knownfor"})
 	if not movie_div:
 		return []

@@ -21,4 +21,4 @@ def resultPage(actor_id = None):
 	else:
 		return redirect(url_for('homePage'))
 if __name__=='__main__':
-	app.run(threaded=True,debug=True)
+	app.run(host='0.0.0.0',threaded=True,debug=True)

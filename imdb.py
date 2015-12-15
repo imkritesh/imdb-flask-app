@@ -38,15 +38,27 @@ def find_by_name(name):
 	return query_result
 
 def get_movie_detail_by_movie_id(movie_id):
+	'''
+	This function return movie details
+	(display pic, title, length, genre, release_date, rating)
+	 of a particular movie. Queries IMDB by movie_id
+	'''
 	r = req.get('http://www.imdb.com/title/'+movie_id)
 	soup = bs(r.text)
 	display = soup.find('div',{'class':'poster'})
-	display_pic = display.find('a').find('img')['src']
+	if display:
+		display_pic = display.find('a').find('img')['src']
+	else:
+		display_pic = ''
 	infobar = soup.find('div',{'class':'subtext'})
 	title = soup.find('title').string
 	title = title.split('-')
 	title = '-'.join(title[i] for i in range(len(title)-1)).strip()
-	length = infobar.find('time').string.strip()
+	length = infobar.find('time')
+	if length:
+		length = length.string.strip()
+	else:
+		length = ''
 	genre_list = infobar.findAll('a')
 	for i in range(len(genre_list)-1):
 		genre_list[i] = genre_list[i].string
@@ -64,7 +76,9 @@ def get_movie_detail_by_movie_id(movie_id):
 
 def get_reviews_by_movie_id(movie_id, count=3):
 	'''
-	Returns top 3 reviews of the movie
+	Returns top 3 reviews of the movie.
+	Queries IMDB by movie_id.
+	Returns an array of dicts. 
 	'''
 	extra_string = '*** This review may contain spoilers ***'
 	extra_string2 = 'Find showtimes, watch trailers, browse photos, track your Watchlist and rate your favorite movies and TV shows on your phone or tablet!'
@@ -88,7 +102,7 @@ def get_reviews_by_movie_id(movie_id, count=3):
 	authors = soup.findAll('a', {'href':re.compile('user')})[1:6:2]
 	authors = [author.string for author in authors]
 	reviews = []
-	for i in range(count):
+	for i in range(min(count,len(headings))):
 		review = {}
 		review['index'] = i+1
 		review['text'] = text_list[i]

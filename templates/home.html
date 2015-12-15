@@ -58,7 +58,7 @@
 
                      <input type="text" class="form-control" name="query" placeholder="Search By Actor/Actress Name" 
                      {%if query%}
-                        value = {{query}}
+                        value = "{{query}}"
                      {%endif%}
                      style="width:90%">             
                      <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>                                 
@@ -115,7 +115,6 @@
 <script type="text/javascript">
     $('a').click(function(){
         console.log('loading');
-        //$('#wrapper').addClass('cen');
         var image = '<center><img style="padding:250px;display:block;" src="{{url_for('static',filename='loader.GIF')}}"></center>';
         $('#wrapper').html(image);
 

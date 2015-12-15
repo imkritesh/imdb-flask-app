@@ -36,12 +36,6 @@
     
 
 </head>
-<script type="text/javascript">
-    $(window).load(function(){
-    console.log('loading');
-});
-</script>
-
 <body>
 <div id="wrapper">
     <div class="container-fluid">
@@ -74,8 +68,12 @@
                                 {%for movie in movies%}
                                   <tr>
                                     <td  class="col-md-2">
+                                        {%if movie.display_pic %}
                                         <img src="{{movie.display_pic}}" class="img-thumbnail"
                                         height="200px" width="200px">
+                                        {%else%}
+                                        <strong>NO DISPLAY PICTURE</strong>
+                                        {%endif%}
                                     </td>
                                     <td  class="col-md-3"> 
                                     <strong>
@@ -121,7 +119,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
         console.log('ready');
-        var showChar = 300;  
+        var showChar = 150;  
         var ellipsestext = "...";
         var moretext = "Show more";
         var lesstext = "Show less";
@@ -130,8 +128,8 @@ $(document).ready(function() {
         if(content.length > showChar) {
             var c = content.substr(0, showChar);
             var h = content.substr(showChar, content.length - showChar);
-         //   console.log('c123:'+c);
-          //  console.log('h456:'+h);
+            //   console.log('c123:'+c);
+            //  console.log('h456:'+h);
             var html = c + '<span class="moreellipses">' + ellipsestext+ '</span><span class="morecontent"><span>' + h + '</span><a href="" class="morelink">' + moretext + '</a></span>';
  
             $(this).html(html);

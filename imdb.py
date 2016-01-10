@@ -45,12 +45,12 @@ def get_movie_detail_by_movie_id(movie_id):
 	'''
 	r = req.get('http://www.imdb.com/title/'+movie_id)
 	soup = bs(r.text, 'html.parser')
-	display = soup.find('div',{'class':'poster'})
+	display = soup.find('div',{'class':'image'})
 	if display:
 		display_pic = display.find('a').find('img')['src']
 	else:
 		display_pic = ''
-	infobar = soup.find('div',{'class':'subtext'})
+	infobar = soup.find('div',{'class':'infobar'})
 	title = soup.find('title').string
 	title = title.split('-')
 	title = '-'.join(title[i] for i in range(len(title)-1)).strip()
@@ -82,6 +82,7 @@ def get_reviews_by_movie_id(movie_id, count=3):
 	'''
 	extra_string = '*** This review may contain spoilers ***'
 	extra_string2 = 'Find showtimes, watch trailers, browse photos, track your Watchlist and rate your favorite movies and TV shows on your phone or tablet!'
+	#print 'http://www.imdb.com/title/'+movie_id+'/reviews'
 	r = req.get('http://www.imdb.com/title/'+movie_id+'/reviews')
 	soup = bs(r.text, 'html.parser')
 	text_list = soup.findAll('p',{'class':''})[5:]
@@ -117,6 +118,7 @@ def find_movies_by_actor_id(actor_id):
 	Return top 3 movies by an actor 
 	using actor_id
 	'''
+	#print 'http://www.imdb.com/name/'+actor_id
 	r = req.get('http://www.imdb.com/name/'+actor_id)
 	soup = bs(r.text, 'html.parser')
 	movie_div = soup.find("div", {"id":"knownfor"})
@@ -138,7 +140,7 @@ def find_movies_by_actor_id(actor_id):
 		movie_list.append(movie)
 	return movie_list
 		
-#find_by_name('shah')
-#find_movies_by_actor_id('nm5305841')
-#get_reviews_by_movie_id('tt1562872')
-#get_movie_detail_by_movie_id('tt4535650')
+#print find_by_name('shah')
+#print find_movies_by_actor_id('nm0451321')
+#print get_reviews_by_movie_id('tt1562872')
+#print get_movie_detail_by_movie_id('tt4535650')

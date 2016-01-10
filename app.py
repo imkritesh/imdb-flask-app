@@ -17,8 +17,9 @@ def resultPage(actor_id = None):
 		name = request.args.get('name')
 		if not name:
 			return redirect(url_for('homePage'))
+		print name
 		return render_template('result.html',movies=find_movies_by_actor_id(actor_id),name=name)
 	else:
 		return redirect(url_for('homePage'))
 if __name__=='__main__':
-	app.run(host='0.0.0.0',threaded=True,debug=True)
+	app.run(debug=True)

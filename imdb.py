@@ -1,6 +1,8 @@
 import requests as req
 from bs4 import BeautifulSoup as bs
 import re
+import datetime
+from multiprocessing import Pool
 
 def find_by_name(name):
 	'''
@@ -45,12 +47,12 @@ def get_movie_detail_by_movie_id(movie_id):
 	'''
 	r = req.get('http://www.imdb.com/title/'+movie_id)
 	soup = bs(r.text, 'html.parser')
-	display = soup.find('div',{'class':'image'})
+	display = soup.find('div',{'class':'poster'})
 	if display:
 		display_pic = display.find('a').find('img')['src']
 	else:
 		display_pic = ''
-	infobar = soup.find('div',{'class':'infobar'})
+	infobar = soup.find('div',{'class':'titleBar'})
 	title = soup.find('title').string
 	title = title.split('-')
 	title = '-'.join(title[i] for i in range(len(title)-1)).strip()
@@ -118,6 +120,9 @@ def find_movies_by_actor_id(actor_id):
 	Return top 3 movies by an actor 
 	using actor_id
 	'''
+	pool = Pool()
+	pool2 = Pool() 
+	startTime = datetime.datetime.now()
 	#print 'http://www.imdb.com/name/'+actor_id
 	r = req.get('http://www.imdb.com/name/'+actor_id)
 	soup = bs(r.text, 'html.parser')
@@ -132,15 +137,17 @@ def find_movies_by_actor_id(actor_id):
 		url = div.find("a")["href"]
 		url = url.split('/')
 		movie["movie_id"] = url[2]
-		movie["display_pic"],movie["title"],movie["length"],movie["genre"],movie["release_date"],movie["rating"] = get_movie_detail_by_movie_id(movie["movie_id"])
+		movie["display_pic"],movie["title"],movie["length"],movie["genre"],movie["release_date"],movie["rating"] = pool.apply_async(get_movie_detail_by_movie_id, args = (movie["movie_id"], )).get()
 		if movie["rating"] == 'Not Yet Released':
 			movie["reviews"] = []
 		else:
 			movie["reviews"] = get_reviews_by_movie_id(movie["movie_id"])
 		movie_list.append(movie)
+	endTime = datetime.datetime.now()
+	print "Time Taken:", (endTime - startTime).total_seconds()
 	return movie_list
 		
 #print find_by_name('shah')
-#print find_movies_by_actor_id('nm0451321')
+#find_movies_by_actor_id('nm0451321')
 #print get_reviews_by_movie_id('tt1562872')
 #print get_movie_detail_by_movie_id('tt4535650')

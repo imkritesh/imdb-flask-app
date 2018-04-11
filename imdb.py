@@ -103,8 +103,9 @@ def get_reviews_by_movie_id(movie_id, count=3):
 	r = req.get('http://www.imdb.com/title/'+movie_id+'/reviews?sort=userRating&dir=desc&ratingFilter=0')
 	soup = bs(r.text, 'html.parser')
 
-	review_containers = soup.findAll("div", {"class":"review-container"})[5:]
+	review_containers = soup.findAll("div", {"class":"review-container"})[:count]
 	
+	print len(review_containers)
 	reviews = []
 	for i, review_container in enumerate(review_containers):
 		review = {}

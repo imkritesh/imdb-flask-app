@@ -12,25 +12,40 @@ def find_by_name(name):
 	'''
 	r = req.get('http://www.imdb.com/search/name?name='+name)
 	soup = bs(r.text, 'html.parser')
-	table = soup.find( "table", {"class":"results"})
+	table = soup.find( "div", {"class":"lister-list"})
+	# print table
+	# return
 	#in case of no results
 	if not table:
 		return []
-	rows = table.findAll('tr')
-	rows.pop(0)
+	rows = table.findAll('div', {"class":"lister-item mode-detail"})
+	# print rows[0]
+	# return
 	query_result = []
-	for i,row in enumerate(rows):
+	for i, row in enumerate(rows):
 		col = {}
-		ro = row.find("td", {"class":"name"})
-		link = ro.find('a')
+		# ro = row.find("td", {"class":"name"})
+		# link = ro.find('a')
 		
-		name = link.string
-		profile_link = link['href']
-		image_link = row.find('img')["src"]
-		bio = ro.find("span",{"class":"bio"})
+		# name = link.string
+		# profile_link = link['href']
+		# image_link = row.find('img')["src"]
+		# bio = ro.find("span",{"class":"bio"})
+
+		image_div = row.find("div", {"class":"lister-item-image"})
+		image_link = image_div.find("img")["src"]
 		
+		content_div = row.find("div", {"class":"lister-item-content"})
+		content_div_header = content_div.find("h3", {"class": "lister-item-header"})
+		content_div_header_atag = content_div_header.find("a") 
+
+		name = content_div_header_atag.text
+		profile_link = content_div_header_atag["href"]
+
+		bio = content_div.findAll("p")[-1]
+
 		col["name"] = name
-		col["actor_id"] = profile_link.split('/')[2] 
+		col["actor_id"] = profile_link.split('/')[-1] 
 		col["image_link"] = image_link
 		if bio is None:
 			col["bio"] = ""
@@ -84,35 +99,21 @@ def get_reviews_by_movie_id(movie_id, count=3):
 	'''
 	extra_string = '*** This review may contain spoilers ***'
 	extra_string2 = 'Find showtimes, watch trailers, browse photos, track your Watchlist and rate your favorite movies and TV shows on your phone or tablet!'
-	#print 'http://www.imdb.com/title/'+movie_id+'/reviews'
-	r = req.get('http://www.imdb.com/title/'+movie_id+'/reviews')
+	print 'http://www.imdb.com/title/'+movie_id+'/reviews?sort=userRating&dir=desc&ratingFilter=0'
+	r = req.get('http://www.imdb.com/title/'+movie_id+'/reviews?sort=userRating&dir=desc&ratingFilter=0')
 	soup = bs(r.text, 'html.parser')
-	text_list = soup.findAll('p',{'class':''})[5:]
-	rev = []
-	i = 0
-	for tex in text_list:
-		# if not text_list[i].text or  text_list[i].text == extra_string or  text_list[i].text == extra_string2: 
-		# 	i-= 1
-		if i == 3:
-			break
-		if not tex.text or tex.text == extra_string:
-			continue
-		#print i,tex.text
-		rev.append(tex.text)
-		i += 1
-	text_list = rev
-	headings =[heading.string for heading in soup.findAll('h2')[:3]]
-	authors = soup.findAll('a', {'href':re.compile('user')})[1:6:2]
-	authors = [author.string for author in authors]
+
+	review_containers = soup.findAll("div", {"class":"review-container"})[5:]
+	
 	reviews = []
-	for i in range(min(count,len(headings))):
+	for i, review_container in enumerate(review_containers):
 		review = {}
-		review['index'] = i+1
-		review['text'] = text_list[i]
-		review['heading'] = headings[i]
-		review['author'] = authors[i]
+		review['index'] = i + 1
+		review['heading'] = review_container.find("div", {"class":"title"}).text
+		review['author'] = review_container.find("span", {"class":"display-name-link"}).find("a").text
+		review['text'] = review_container.find("div", {"class":"text"}).text
 		reviews.append(review)
-	#print reviews
+	
 	return reviews
 
 def find_movies_by_actor_id(actor_id):
@@ -129,15 +130,17 @@ def find_movies_by_actor_id(actor_id):
 	movie_div = soup.find("div", {"id":"knownfor"})
 	if not movie_div:
 		return []
-	divs = movie_div.findAll("div")
+	divs = movie_div.findAll("div", {"class":"knownfor-title"})
 	divs = divs[:3]#To get only Top 3 movies.
 	movie_list = []
+	# print divs
 	for div in divs:
 		movie = {}
 		url = div.find("a")["href"]
 		url = url.split('/')
 		movie["movie_id"] = url[2]
-		movie["display_pic"],movie["title"],movie["length"],movie["genre"],movie["release_date"],movie["rating"] = pool.apply_async(get_movie_detail_by_movie_id, args = (movie["movie_id"], )).get()
+		movie["display_pic"],movie["title"],movie["length"],movie["genre"],movie["release_date"],movie["rating"] = get_movie_detail_by_movie_id(movie["movie_id"])
+		#  = pool.apply_async(get_movie_detail_by_movie_id, args = (movie["movie_id"], )).get()
 		if movie["rating"] == 'Not Yet Released':
 			movie["reviews"] = []
 		else:
@@ -147,7 +150,7 @@ def find_movies_by_actor_id(actor_id):
 	print "Time Taken:", (endTime - startTime).total_seconds()
 	return movie_list
 		
-#print find_by_name('shah')
-#find_movies_by_actor_id('nm0451321')
-#print get_reviews_by_movie_id('tt1562872')
-#print get_movie_detail_by_movie_id('tt4535650')
+# print find_by_name('shah')
+# print find_movies_by_actor_id('nm0451321')
+# print get_reviews_by_movie_id('tt1562872')
+# print get_movie_detail_by_movie_id('tt4535650')

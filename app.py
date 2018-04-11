@@ -8,7 +8,7 @@ def homePage():
 	query = request.args.get('query')
 	if query is not None and query:
 		actors = find_by_name(query)
-		#print str(actors)
+		print str(actors)
 	return render_template('home.html', actors = actors, query = query)
 @app.route('/person/')
 @app.route('/person/<actor_id>')
